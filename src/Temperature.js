@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Temperature = ({ weather }) => {
-    console.log("into temperature" + weather);
+const Temperature = ({ temp, type, date }) => {
   return (
     <div>
+      {temp} - {type} - {date}
     </div>
   )
 }

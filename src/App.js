@@ -4,8 +4,8 @@ import './App.css'
 import Temperature from "./Temperature"
 
 function App() {
-  const location = useRef()
-  const [weather, setWeather] = useState([])
+  const location = useRef("liege")
+  const [weather, setWeather] = useState()
   const [photos, setPhotos] = useState()
 
   function getWeather () {
@@ -13,8 +13,14 @@ function App() {
     
     .then((response) => {
       console.log("API weather : " + response.status);
-      //console.log(response);
-      setWeather(response.data)
+      console.log(response);
+      setWeather(response.data.list.map(item => {
+        return{
+          temp : item.main.temp,
+          type : item.weather[0].main,
+          date : item.dt_txt
+        }
+      }))
       console.log(weather)
     })
     .catch((error) => {
@@ -37,8 +43,14 @@ function App() {
     <div className="App">
       <input type="text" ref={location} required placeholder="Select a place"></input>
       <button onClick={getWeather}> Get weather </button>
-      <img src={photos}/>
-      <Temperature weather={weather}/>
+      <img src={photos} alt={location.current.value}/>
+      <div>
+        {weather.map((i)=> (
+          <div key={i.date}>
+            <Temperature temp={i.temp} type={i.type} date={i.date} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
